@@ -20,6 +20,7 @@ class TribuneNewsItem(scrapy.Item):
     author_name = scrapy.Field()
     location = scrapy.Field()
     text = scrapy.Field()
+    text_plain = scrapy.Field()
     source_url = scrapy.Field()
     image_urls = scrapy.Field()
     images = scrapy.Field()

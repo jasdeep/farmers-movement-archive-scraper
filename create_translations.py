@@ -2,7 +2,7 @@
 import argparse
 import os
 from google.cloud import translate
-
+from datetime import date
 
 def google_translate_text(text="YOUR_TEXT_TO_TRANSLATE", project_id="YOUR_PROJECT_ID", source_lang="auto",
                           dest_lang="en-US"):
@@ -52,15 +52,7 @@ def write_translated_file(source_file, src_lang, dest_lang):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(
-        description="Simple Python script to translate text using Google Translate API (googletrans wrapper)")
-    parser.add_argument("target", help="Text/Document to translate")
-    # parser.add_argument("-s", "--source", help="Source language, default is Google Translate's auto detection",
-    #                     default="auto")
-    # parser.add_argument("-d", "--destination", help="Destination language, default is English", default="en")
-
-    args = parser.parse_args()
-    target = args.target
+    target = f'tt_{date.today().strftime("%Y-%m-%d")}.txt'
     src = "pa"
 
     if os.path.isfile(target):
@@ -88,16 +80,4 @@ if __name__ == "__main__":
         # not a file, just text, print the translated text to standard output
         print(translate_text(target, src=src, dest="en"))
 
-# import shutil
-# from pathlib import Path
 #
-#
-# source_file_path='2021-04-26.txt'
-#
-# source_file_path_stem=Path(source_file_path).stem
-#
-# shutil.copyfile(source_file_path,source_file_path_stem+'_en'+'.txt')
-#
-# shutil.copyfile(source_file_path,source_file_path_stem+'_hi'+'.txt')
-#
-# shutil.copyfile(source_file_path,source_file_path_stem+'_ur'+'.txt')

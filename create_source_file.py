@@ -3,6 +3,7 @@ import os
 import locale
 from datetime import datetime
 from datetime import date
+import xml.etree.ElementTree as ET
 
 try:
     locale.setlocale(locale.LC_ALL, "pa_IN")
@@ -21,20 +22,30 @@ nthday_text = str(delta.days) + " ਵਾਂ ਦਿਨ"
 date_text = date_today.strftime("%d %B")
 source_text = "ਸਰੋਤ: ਸੰਯੁਕਤ ਕਿਸਾਨ ਮੋਰਚਾ, ਪੰਜਾਬੀ ਟ੍ਰਿਬਿਊਨ, ਇੰਡੀਅਨ ਐਕਸਪ੍ਰੈੱਸ"
 
-source_filename_path = date_today.strftime('%Y-%m-%d') + ".txt"
+date_today_text=date_today.strftime('%Y-%m-%d')
+source_filename_path = f"tt_{date_today_text}.txt"
 
 if not os.path.exists(source_filename_path):
     print("Creating file", source_filename_path)
     with open(source_filename_path, 'w', encoding="utf-8") as source_file:
         source_file.write(nthday_text + "\n")
         source_file.write(date_text + "\n")
-        source_file.write("\n")
-        source_file.write("*")
-        source_file.write("\n")
-        source_file.write("*")
-        source_file.write("\n")
-        source_file.write("*")
+        if os.path.exists(f"tribune_scraper/kirti-kisan-news-items_{date_today_text}.xml"):
+            parser = ET.XMLParser(encoding="utf-8")
+            root = ET.parse(f"tribune_scraper/kirti-kisan-news-items_{date_today_text}.xml", parser=parser).getroot()
+            for item in root.findall('item'):
+                headline = []
+                headline_text = item.find('.//headline').text
+                subtitle_text = item.find('.//subtitle').text
+                headline.append(headline_text)
+                if subtitle_text is not None:
+                    headline.append(" // " + subtitle_text.replace('*', '').strip())
+
+                source_file.write("\n")
+                source_file.write("* " + ''.join(headline))
+                source_file.write("\n")
         source_file.write("\n")
         source_file.write(source_text + "\n")
+
 else:
     print("File already exists", source_filename_path)

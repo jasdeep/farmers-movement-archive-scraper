@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import os
+import re
 from datetime import date
 from datetime import timedelta
 
@@ -14,20 +16,30 @@ from tribune_scraper.settings import KIRTI_KEYWORDS
 class PunjabiTribuneSpider(scrapy.Spider):
     name = 'punjabi_tribune'
 
-    start_urls = ['https://www.punjabitribuneonline.com/']
-    #    start_dt = date(2021, 4, 20)
-    #    end_dt = date(2021, 4, 21)
+    start_urls = ['https://www.punjabitribuneonline.com']
     date_today = date.today()
-    # date_today = date(2021, 5, 2)
     filename_day = date_today.strftime('%Y-%m-%d')
-    day_archive_dir = os.path.join("D:/media/docs/personal/Dropbox/work/writings-trolleytimes/roundups/archive",
-                                   filename_day)
-
+    day_archive_dir = os.path.join("../archive", filename_day)
     xml_output_file_name = os.path.join(day_archive_dir, f"kirti-kisan-news-items_{filename_day}.xml")
     json_output_file_name = os.path.join(day_archive_dir, f"kirti-kisan-news-items_{filename_day}.json")
-    custom_settings = {
-        'FEED_FORMAT': 'xml',
-        'FEED_URI': f"kirti-kisan-news-items_{filename_day}.xml",
+    custom_settings = {'FEEDS': {
+        f'../archive/{filename_day}/kirti-kisan-news-items_{filename_day}.json': {
+            'format': 'json',
+            'encoding': 'utf8',
+            'store_empty': False,
+            'indent': 4,
+            'item_export_kwargs': {
+                'export_empty_fields': True,
+            },
+            'overwrite': True,
+        },
+        f'../archive/{filename_day}/kirti-kisan-news-items_{filename_day}.xml': {
+            'format': 'xml',
+            'encoding': 'utf8',
+            'indent': 8,
+            'overwrite': True,
+        },
+    }
     }
 
     def start_requests(self):
@@ -83,15 +95,25 @@ class PunjabiTribuneSpider(scrapy.Spider):
         day_archive_dir = self.day_archive_dir
         headline_url_text = response.url.rsplit('/', 1)[-1]
         filename_headline = headline_url_text[-8:]
-        filename_kirti_kisan_newsitem = os.path.join(day_archive_dir,
-                                                     f'kirti-kisan-news_{self.filename_day}_{filename_headline}.html')
+        filename_kirti_kisan_newsitem_html = os.path.join(day_archive_dir,
+                                                          f'kirti-kisan-news_{self.filename_day}_{filename_headline}.html')
+        filename_kirti_kisan_newsitem_text = os.path.join(day_archive_dir,
+                                                          f'kirti-kisan-news_{self.filename_day}_{filename_headline}.txt')
         response_body = response.body
-        with open(filename_kirti_kisan_newsitem, 'wb') as f:
+        with open(filename_kirti_kisan_newsitem_html, 'wb') as f:
             f.write(response_body)
 
         newsitem_headline = response.xpath('//div[@class="glb-heading"]/h1/text()').get()
-        newsitem_subtitle = response.xpath('//div[@class="glb-heading"]/p/text()').get()
 
+        headline_text = response.xpath('string(//div[@class="glb-heading"])').get() or ""
+        date_text = response.xpath('string(//div[@class="time-share"])').get() or ""
+        total_news_text = response.xpath('string(//div[@class="news-area"])').get() or ""
+        with open(filename_kirti_kisan_newsitem_text, 'w', encoding="utf-8") as f_text:
+            f_text.write(headline_text.strip() + '\n')
+            f_text.write(self.clean_text(date_text) + '\n')
+            f_text.write(total_news_text.strip())
+
+        newsitem_subtitle = response.xpath('//div[@class="glb-heading"]/p/text()').get()
         newsitem_image_url = response.xpath(
             '//div[@class="news-area"]/div[@class="img-container-detail"]/img/@src').get()
         newsitem_image_caption = response.xpath(
@@ -144,23 +166,5 @@ class PunjabiTribuneSpider(scrapy.Spider):
 
         yield tribune_news_item
 
-
-# process = CrawlerProcess(settings={
-#     "FEEDS": {
-#         f"kirti-kisan-news-items_{PunjabiTribuneSpider.filename_day}.xml": {'format': 'xml', 'encoding': 'utf8',
-#                                                                             'indent': 4, },
-#         f"kirti-kisan-news-items_{PunjabiTribuneSpider.filename_day}.json": {
-#             'format': 'json',
-#             'encoding': 'utf8',
-#             'store_empty': False,
-#             'fields': None,
-#             'indent': 4,
-#             'item_export_kwargs': {
-#                 'export_empty_fields': True,
-#             },
-#         },
-#     },
-# })
-
-# process.crawl(PunjabiTribuneSpider)
-# process.start()
+    def clean_text(self, unclean_text):
+        return re.sub(r'(\n\s*)+\n+', '\n\n', unclean_text)

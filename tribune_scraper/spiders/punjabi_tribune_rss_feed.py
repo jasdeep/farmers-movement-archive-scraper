@@ -2,7 +2,6 @@ from datetime import date
 from re import search
 
 import scrapy
-import os
 
 from tribune_scraper.items import TribuneNewsItem
 from tribune_scraper.settings import KIRTI_KEYWORDS
@@ -40,18 +39,31 @@ class PunjabiTribuneRSSFeedSpider(scrapy.Spider):
                   "https://www.punjabitribuneonline.com/rss/feed?catId=59",
                   "https://www.punjabitribuneonline.com/rss/feed?catId=62",
                   "https://www.punjabitribuneonline.com/rss/feed?catId=216",
-                  "https://www.punjabitribuneonline.com/rss/feed?catId=221",
-                  "https://www.punjabitribuneonline.com/rss/feed?catId=218",
-                  'https://www.punjabitribuneonline.com/rss/feed?catId=24']
+                  "https://www.punjabitribuneonline.com/rss/feed?catId=221"
+                  ]
 
     date_today = date.today()
     date_day_text = date_today.strftime('%d %B %Y')
-    filename_today = date_today.strftime('%Y-%m-%d')
-    day_archive_dir = os.path.join("D:/media/docs/personal/Dropbox/work/writings-trolleytimes/roundups/archive", filename_today)
-    xml_output_file_name =  f"kirti-kisan-news-items-feed_{filename_today}.xml"
-    custom_settings = {
-        'FEED_FORMAT': 'xml',
-        'FEED_URI': xml_output_file_name,
+    filename_day = date_today.strftime('%Y-%m-%d')
+
+    custom_settings = {'FEEDS': {
+        f'../archive/{filename_day}/kirti-kisan-news-items-feed_{filename_day}.json': {
+            'format': 'json',
+            'encoding': 'utf8',
+            'store_empty': False,
+            'indent': 4,
+            'item_export_kwargs': {
+                'export_empty_fields': True,
+            },
+            'overwrite': True,
+        },
+        f'../archive/{filename_day}/kirti-kisan-news-items-feed_{filename_day}.xml': {
+            'format': 'xml',
+            'encoding': 'utf8',
+            'indent': 8,
+            'overwrite': True,
+        },
+    }
     }
 
     def start_requests(self):

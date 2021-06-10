@@ -11,18 +11,18 @@ import scrapy
 from scrapy.http import FormRequest
 
 from tribune_scraper.items import TribuneNewsItem
-from tribune_scraper.settings import KIRTI_KEYWORDS_PA, KIRTI_TEXT_KEYWORDS_PA, KIRTI_WOMEN_KEYWORDS_PA
+from tribune_scraper.settings import KIRTI_KEYWORDS_HI, KIRTI_TEXT_KEYWORDS_HI
 
 
-class PunjabiTribuneSpider(scrapy.Spider):
-    name = 'punjabi_tribune'
+class DainikTribuneSpider(scrapy.Spider):
+    name = 'dainik_tribune'
 
-    start_urls = ['https://www.punjabitribuneonline.com']
+    start_urls = ['https://www.dainiktribuneonline.com/']
     date_today = date.today()
     filename_day = date_today.strftime('%Y-%m-%d')
     day_archive_dir = os.path.join("../archive", filename_day)
     custom_settings = {'FEEDS': {
-        f'../archive/{filename_day}/kirti-kisan-news-items_pt_{filename_day}.json': {
+        f'../archive/{filename_day}/kirti-kisan-news-items_dt_{filename_day}.json': {
             'format': 'json',
             'encoding': 'utf8',
             'store_empty': False,
@@ -32,7 +32,7 @@ class PunjabiTribuneSpider(scrapy.Spider):
             },
             'overwrite': True,
         },
-        f'../archive/{filename_day}/kirti-kisan-news-items_pt_{filename_day}.xml': {
+        f'../archive/{filename_day}/kirti-kisan-news-items_dt_{filename_day}.xml': {
             'format': 'xml',
             'encoding': 'utf8',
             'indent': 8,
@@ -47,7 +47,7 @@ class PunjabiTribuneSpider(scrapy.Spider):
         #      to_date = self.end_dt.strftime('%d/%m/%Y')
         from_date = self.date_today.strftime('%d/%m/%Y')
         to_date = date_tomorrow.strftime('%d/%m/%Y')
-        return [FormRequest("https://www.punjabitribuneonline.com/archive",
+        return [FormRequest("https://www.dainiktribuneonline.com/archive",
                             formdata={'FromDate': from_date, 'ToDate': to_date},
                             callback=self.parse)]
 
@@ -59,13 +59,13 @@ class PunjabiTribuneSpider(scrapy.Spider):
         except OSError as error:
             print("Directory '%s' can not be created" % day_archive_dir)
 
-        filename_html = os.path.join(day_archive_dir, f'archives-page_pt_{self.filename_day}.html')
-        filename_csv = os.path.join(day_archive_dir, f'archives-page_pt_{self.filename_day}.csv')
-        filename_kirti_kisan_csv = os.path.join(day_archive_dir, f'kirti-kisan-headlines_pt_{self.filename_day}.csv')
+        filename_html = os.path.join(day_archive_dir, f'archives-page_dt_{self.filename_day}.html')
+        filename_csv = os.path.join(day_archive_dir, f'archives-page_dt_{self.filename_day}.csv')
+        filename_kirti_kisan_csv = os.path.join(day_archive_dir, f'kirti-kisan-headlines_dt_{self.filename_day}.csv')
         filename_kirti_kisan_women_csv = os.path.join(day_archive_dir,
-                                                      f'kirti-kisan-women_headlines_pt_{self.filename_day}.csv')
-        with open(filename_html, 'wb') as f:
-            f.write(response.body)
+                                                      f'kirti-kisan-women_headlines_dt_{self.filename_day}.csv')
+        #        with open(filename_html, 'wb') as f:
+        #           f.write(response.body)
 
         all_headlines = []
         all_pt_archive_page_sections = response.xpath('//div[@class="archive-cat-news"]')
@@ -86,11 +86,11 @@ class PunjabiTribuneSpider(scrapy.Spider):
         all_headlines_df = pd.DataFrame(all_headlines, columns=['headline', 'link', 'section_title'])
         all_headlines_df.to_csv(filename_csv, sep=",", index=False)
         kirti_kisan_df = all_headlines_df[all_headlines_df['headline'].str.contains(
-            KIRTI_KEYWORDS_PA)]
+            KIRTI_KEYWORDS_HI)]
         kirti_kisan_df.to_csv(filename_kirti_kisan_csv, index=False)
-        kirti_kisan_women_df = all_headlines_df[all_headlines_df['headline'].str.contains(
-            KIRTI_WOMEN_KEYWORDS_PA)]
-        kirti_kisan_women_df.to_csv(filename_kirti_kisan_women_csv, index=False)
+        # kirti_kisan_women_df = all_headlines_df[all_headlines_df['headline'].str.contains(
+        #     KIRTI_WOMEN_KEYWORDS_PA)]
+        # kirti_kisan_women_df.to_csv(filename_kirti_kisan_women_csv, index=False)
         for index, row in all_headlines_df.iterrows():
             absolute_url = self.start_urls[0] + row["link"]
             yield scrapy.Request(absolute_url, callback=self.parse_newsitem)
@@ -99,20 +99,20 @@ class PunjabiTribuneSpider(scrapy.Spider):
         day_archive_dir = self.day_archive_dir
         headline_url_text = response.url.rsplit('/', 1)[-1]
         article_id = headline_url_text[-5:]
-        #        filename_kirti_kisan_newsitem_html = os.path.join(day_archive_dir,
-        #                                                         f'kirti-kisan-news_pt_{self.filename_day}_{article_id}.html')
+        filename_kirti_kisan_newsitem_html = os.path.join(day_archive_dir,
+                                                          f'kirti-kisan-news_dt_{self.filename_day}_{article_id}.html')
         filename_kirti_kisan_newsitem_text = os.path.join(day_archive_dir,
-                                                          f'kirti-kisan-news_pt_{self.filename_day}_{article_id}.txt')
+                                                          f'kirti-kisan-news_dt_{self.filename_day}_{article_id}.txt')
 
         newsitem_headline = response.xpath('//div[@class="glb-heading"]/h1/text()').get()
 
         headline_text = response.xpath('string(//div[@class="glb-heading"])').get() or ""
         date_text = response.xpath('string(//div[@class="time-share"])').get() or ""
         total_news_text = response.xpath('string(//div[@class="news-area"])').get() or ""
-        #   with open(filename_kirti_kisan_newsitem_text, 'w', encoding="utf-8") as f_text:
-        #      f_text.write(headline_text.strip() + '\n')
-        ##     f_text.write(self.clean_text(date_text) + '\n')
-        #   f_text.write(total_news_text.strip())
+        #      with open(filename_kirti_kisan_newsitem_text, 'w', encoding="utf-8") as f_text:
+        #         f_text.write(headline_text.strip() + '\n')
+        #        f_text.write(self.clean_text(date_text) + '\n')
+        #       f_text.write(total_news_text.strip())
 
         newsitem_subtitle = response.xpath('//div[@class="glb-heading"]/p/text()').get()
         newsitem_image_url = response.xpath(
@@ -154,11 +154,11 @@ class PunjabiTribuneSpider(scrapy.Spider):
         headline_text = "" if newsitem_headline is None else newsitem_headline.strip()
         subtitle_text = "" if newsitem_subtitle is None else newsitem_subtitle.strip()
 
-        if search(KIRTI_KEYWORDS_PA, headline_text) or search(
-                KIRTI_KEYWORDS_PA, subtitle_text) or search(KIRTI_TEXT_KEYWORDS_PA, newsitem_news_text_data):
-            #          response_body = response.body
-            #         with open(filename_kirti_kisan_newsitem_html, 'wb') as f:
-            #            f.write(response_body)
+        if search(KIRTI_KEYWORDS_HI, headline_text) or search(
+                KIRTI_KEYWORDS_HI, subtitle_text) or search(KIRTI_TEXT_KEYWORDS_HI, newsitem_news_text_data):
+            #    response_body = response.body
+            #      with open(filename_kirti_kisan_newsitem_html, 'wb') as f:
+            #         f.write(response_body)
 
             tribune_news_item = TribuneNewsItem()
             tribune_news_item['headline'] = headline_text

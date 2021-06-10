@@ -24,8 +24,6 @@
                         <div class="column">
                             <h1 style="text-align: center">ਪੰਜਾਬੀ ਟ੍ਰਿਬਿਊਨ</h1>
                             <br/>
-                            <p style="text-align: center"> 6 ਮਈ 2021</p>
-                            <br/>
                             <p style="text-align: center">ਅੱਜ ਦੀਆਂ ਕਿਰਤੀ ਕਿਸਾਨਾਂ ਦੀਆਂ ਖ਼ਬਰਾਂ</p>
                         </div>
                     </div>

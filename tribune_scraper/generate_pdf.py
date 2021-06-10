@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from io import BytesIO
-from reportlab.platypus import SimpleDocTemplate, Paragraph, PageBreak
+
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm, inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 PAGESIZE = (140 * mm, 216 * mm)
 BASE_MARGIN = 5 * mm

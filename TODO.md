@@ -4,7 +4,7 @@ Things to do in farmers movements archiving
 
 ## Improvements
 
-- [] Switch to json output
+- [*] Switch to json output
 
 - [] Rather than generating html from xml. Generate markdown from json
 
@@ -16,10 +16,14 @@ Things to do in farmers movements archiving
 
 - [] Upload to farmers movement archive omeka site
 
-## Additions
+### Additions
+
+- [] Write support for women specific news
 
 - Add more news sources. Indian Express, PARI, Newslaundry, The Caravan, The Wire, NDTV
+
 - For other news sources run sentiment analysis to identify negative or positive news stories
+
 - Publish a news aggrgated website.
 
 ### Feeds
@@ -28,5 +32,10 @@ Things to do in farmers movements archiving
 - [] https://ruralindiaonline.org/en/feeds/list/
 - [] feed:http://sanhati.com/feed/
 
- 
+- @Kisanektamorcha
+- @amaanbali
+- @punyaab
+- @neelkamaltoi
+- @thecarvanidia
+- @newslaundry
 

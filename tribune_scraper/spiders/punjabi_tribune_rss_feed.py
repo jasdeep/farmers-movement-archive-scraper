@@ -4,13 +4,11 @@ from re import search
 import scrapy
 
 from tribune_scraper.items import TribuneNewsItem
-from tribune_scraper.settings import KIRTI_KEYWORDS
+from tribune_scraper.settings import KIRTI_KEYWORDS_PA
 
 
 class PunjabiTribuneRSSFeedSpider(scrapy.Spider):
     name = 'punjabi_tribune_rss_feed'
-
-
 
     start_urls = ['https://www.punjabitribuneonline.com/rss/feed?catId=42',
                   'https://www.punjabitribuneonline.com/rss/feed?catId=45',
@@ -77,8 +75,8 @@ class PunjabiTribuneRSSFeedSpider(scrapy.Spider):
             title = post.xpath('title//text()').get()
             description = post.xpath('description//text()').get()
             subtitle = "" if post.xpath('excerpt') is None else post.xpath('excerpt//text()').get()
-            if date.today().strftime('%d %B %Y') in pub_date and (search(KIRTI_KEYWORDS, title) or search(
-                    KIRTI_KEYWORDS, description)):
+            if date.today().strftime('%d %B %Y') in pub_date and (search(KIRTI_KEYWORDS_PA, title) or search(
+                    KIRTI_KEYWORDS_PA, description)):
                 tribune_news_item = TribuneNewsItem()
                 tribune_news_item['headline'] = title
                 tribune_news_item['subtitle'] = subtitle

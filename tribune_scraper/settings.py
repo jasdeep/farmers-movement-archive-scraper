@@ -85,8 +85,13 @@ ROBOTSTXT_OBEY = True
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
-IMAGES_STORE = 'images'
-#ARCHIVE_STORE = 'D:/media/docs/personal/Dropbox/work/writings-trolleytimes/roundups/archive'
+# ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
+# IMAGES_STORE = 'images'
+# ARCHIVE_STORE = 'D:/media/docs/personal/Dropbox/work/writings-trolleytimes/roundups/archive'
 
-KIRTI_KEYWORDS = "ਕਿਸਾਨ|ਕਿਸਾਨਾਂ|ਮਜ਼ਦੂਰ|ਮਜ਼ਦੂਰਾਂ|ਮਜਦੂਰ|ਮਜਦੂਰਾਂ|ਲੇਬਰ|ਯੂਨੀਅਨ|ਯੂਨੀਅਨਾਂ|ਮੋਰਚਾ|ਮੋਰਚਿਆਂ|ਕਿਰਤੀ"
+KIRTI_KEYWORDS_PA = "ਕਿਸਾਨ|ਕਿਸਾਨਾਂ|ਮਜ਼ਦੂਰ|ਮਜ਼ਦੂਰਾਂ|ਮਜਦੂਰ|ਮਜਦੂਰਾਂ|ਲੇਬਰ|ਧਰਨਾ|ਧਰਨੇ|ਯੂਨੀਅਨ|ਯੂਨੀਅਨਾਂ|ਮੋਰਚਾ|ਮੋਰਚਿਆਂ|ਕਿਰਤੀ|ਕਾਮੇ|ਪੱਲੇਦਾਰ|ਭੱਠਾ|ਮੁਲਾਜ਼ਮ|ਮੁਲਾਜਮ|ਹੜਤਾਲ|ਮੁਜ਼ਾਹਰਾ|ਵਿਰੋਧ|ਪ੍ਰਦਰਸ਼ਨ"
+KIRTI_TEXT_KEYWORDS_PA = "ਕਿਸਾਨ ਮੋਰਚਾ|ਕਿਸਾਨ ਅੰਦੋਲਨ।ਕਿਸਾਨੀ ਲਹਿਰ|ਕਿਸਾਨ ਆਗੂ"
+KIRTI_WOMEN_KEYWORDS_PA = "ਔਰਤ|ਔਰਤਾਂ|ਬੀਬੀ|ਬੀਬੀਆਂ|ਮਹਿਲਾ|ਮਹਿਲਾਵਾਂ|ਅਧਿਆਪਕਾ|ਅਧਿਆਪਕਾਵਾਂ|ਵਿਦਿਆਰਥਣ|ਵਿਦਿਆਰਥਣਾਂ|ਲੜਕੀ|ਲੜਕੀਆ|ਕੁੜੀ|ਕੁੜੀਆਂ"
+
+KIRTI_KEYWORDS_HI = "किसान|किसानों|मज़दूर|मज़दूरों|मजदूर|मजदूरों|लेबर|धरना|धरने|यूनीअन|यूनीअनों|किरती|कामे"
+KIRTI_TEXT_KEYWORDS_HI = "किसान मोरचा|किसान अंदोलन्।किसानी लहिर|किसान नेता"

@@ -42,6 +42,7 @@ class DainikTribuneSpider(scrapy.Spider):
     }
 
     def start_requests(self):
+        print("Processing news articles of Dainik Tribune on " + self.filename_day)
         date_tomorrow = self.date_today + timedelta(days=1)
         #      from_date = self.start_dt.strftime('%d/%m/%Y')
         #      to_date = self.end_dt.strftime('%d/%m/%Y')
@@ -53,11 +54,14 @@ class DainikTribuneSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         day_archive_dir = self.day_archive_dir
-        try:
-            os.makedirs(day_archive_dir, exist_ok=True)
-            print("Directory '%s' created successfully" % day_archive_dir)
-        except OSError as error:
-            print("Directory '%s' can not be created" % day_archive_dir)
+        if os.path.isdir(day_archive_dir):
+            print("Directory '%s' exists already" % day_archive_dir)
+        else:
+            try:
+                os.makedirs(day_archive_dir, exist_ok=True)
+                print("Directory '%s' created successfully" % day_archive_dir)
+            except OSError as error:
+                print("Directory '%s' can not be created" % day_archive_dir)
 
         filename_html = os.path.join(day_archive_dir, f'archives-page_dt_{self.filename_day}.html')
         filename_csv = os.path.join(day_archive_dir, f'archives-page_dt_{self.filename_day}.csv')

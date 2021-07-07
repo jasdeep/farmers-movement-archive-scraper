@@ -24,3 +24,4 @@ class TribuneNewsItem(scrapy.Item):
     source_url = scrapy.Field()
     image_urls = scrapy.Field()
     images = scrapy.Field()
+    priority = scrapy.Field()

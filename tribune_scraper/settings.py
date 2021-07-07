@@ -89,9 +89,14 @@ ROBOTSTXT_OBEY = True
 # IMAGES_STORE = 'images'
 # ARCHIVE_STORE = 'D:/media/docs/personal/Dropbox/work/writings-trolleytimes/roundups/archive'
 
+#logging
+LOG_FILE='scrapy.log'
+LOG_LEVEL='INFO'
+
 KIRTI_KEYWORDS_PA = "ਕਿਸਾਨ|ਕਿਸਾਨਾਂ|ਮਜ਼ਦੂਰ|ਮਜ਼ਦੂਰਾਂ|ਮਜਦੂਰ|ਮਜਦੂਰਾਂ|ਲੇਬਰ|ਧਰਨਾ|ਧਰਨੇ|ਯੂਨੀਅਨ|ਯੂਨੀਅਨਾਂ|ਮੋਰਚਾ|ਮੋਰਚਿਆਂ|ਕਿਰਤੀ|ਕਾਮੇ|ਪੱਲੇਦਾਰ|ਭੱਠਾ|ਮੁਲਾਜ਼ਮ|ਮੁਲਾਜਮ|ਹੜਤਾਲ|ਮੁਜ਼ਾਹਰਾ|ਵਿਰੋਧ|ਪ੍ਰਦਰਸ਼ਨ"
 KIRTI_TEXT_KEYWORDS_PA = "ਕਿਸਾਨ ਮੋਰਚਾ|ਕਿਸਾਨ ਅੰਦੋਲਨ।ਕਿਸਾਨੀ ਲਹਿਰ|ਕਿਸਾਨ ਆਗੂ"
 KIRTI_WOMEN_KEYWORDS_PA = "ਔਰਤ|ਔਰਤਾਂ|ਬੀਬੀ|ਬੀਬੀਆਂ|ਮਹਿਲਾ|ਮਹਿਲਾਵਾਂ|ਅਧਿਆਪਕਾ|ਅਧਿਆਪਕਾਵਾਂ|ਵਿਦਿਆਰਥਣ|ਵਿਦਿਆਰਥਣਾਂ|ਲੜਕੀ|ਲੜਕੀਆ|ਕੁੜੀ|ਕੁੜੀਆਂ"
+CORONA_MEDICAL_KEYWORDS_PA = "ਕਰੋਨਾ|ਕੋਰੋਨਾ|ਕਰਫਿਊ|ਕਰਫ਼ਿਊ|ਮੈਡੀਕਲ|ਡਾਕਟਰ|ਪੁਲਿਸ|ਉਲੰਘਣਾ|ਘੇਰੇ|ਬਾਈਕਾਟ"
 
 KIRTI_KEYWORDS_HI = "किसान|किसानों|मज़दूर|मज़दूरों|मजदूर|मजदूरों|लेबर|धरना|धरने|यूनीअन|यूनीअनों|किरती|कामे"
 KIRTI_TEXT_KEYWORDS_HI = "किसान मोरचा|किसान अंदोलन्।किसानी लहिर|किसान नेता"
